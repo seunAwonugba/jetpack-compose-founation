@@ -41,6 +41,8 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
+
 @Composable
 fun ClickCounter(clicks: Int, onClick: () -> Unit) {
     Button(onClick = onClick) {
@@ -50,14 +52,31 @@ fun ClickCounter(clicks: Int, onClick: () -> Unit) {
 
 //state practice
 
+
+//hoisting of the Input field stateless composable
 @Composable
-fun InputField(){
+fun statelessInputField(){
     var userInput by rememberSaveable {
         mutableStateOf("")
     }
+    
+    InputField(userInput = userInput) {
+        userInput = it
+        
+    }
+
+}
+
+
+// second parameter is a lambda that gets triggered when the state needs to update
+
+//stateless composable
+@Composable
+fun InputField(userInput : String, stateLambda : (String) -> Unit  ){
+
     OutlinedTextField(
         value = userInput,
-        onValueChange = {userInput = it},
+        onValueChange = stateLambda,
         label = { Text(text = "Firstname")},
         placeholder = { Text(text = "Firstname")},
         modifier = Modifier.fillMaxWidth()
